@@ -1,0 +1,24 @@
+Team Members:
+Laxmiprasad Iyer
+Chirag Mandot
+
+The maze is encoded in the form of prolog facts 'space(x,y)'.
+
+First the maze is encoded in prolog format in the file maze and loaded.
+
+BFS:
+The prolog program uses the maze encoding described above, and generates successors for each state. The bfs function maintains a visited
+list and a fringe list, and recursively calls itself after updating the fringe list and visited list with the successor values. 
+
+Finally the bfs tree is written into a file bfs_tree(in the form of prolog facts).
+
+Then the prolog program 'path' is used to write out the path from start node to goal node using the loaded bfs_tree. This path is written into a file output, which is parsed by the python program and returned in the bfs function.
+
+DFS:
+Add elements to the head of the list rather than the end.
+
+A Star:
+Facts are generated for the heurestic function as well. The Fringe list is maintained in the form of a priority queue, where an insert procedure
+determines the correct position to insert the element. g(n) is calculated inductively.
+
+

@@ -1,0 +1,50 @@
+% not(P) :- call(P), !, fail.
+% not(P). 
+
+% space is in the coordinates of the pacman coordinate system
+% 
+
+ member(X,[X|L]).
+ member(X,[Y|L]) :-
+     member(X,L).
+
+append([],L,L).
+append([X|L],M,[X|N]) :- append(L,M,N).
+
+
+ printlist([]).
+    
+    printlist([X|List]) :-
+        write(X),nl,
+        printlist(List).
+
+         
+
+dfscall((X1,Y1),(X2,Y2)) :- Goal = (X2,Y2), 
+				GrayBlack = [(X1,Y1)],
+				open('dfstree',write, Stream),
+				Fringe = [(X1,Y1)],
+				 (dfs(GrayBlack, Fringe, Goal, Stream) -> true ; true) ,
+				close(Stream). % this statement is executed regardless
+
+dfs( X, [], Goal, Stream).
+         
+dfs(GrayBlack ,Fringe, Goal, Stream) :- Fringe = [(X,Y) | Fringe_m ] ,
+							 Goal \= (X,Y) ,
+							XP is X+1,
+							XM is X-1,
+							YP is Y+1,	
+							YM is Y-1,
+							D1 is 2, D2 is 4, D3 is 1, D4 is 3,
+						
+							 s(Stream, D1,(X,Y),(XP,Y),GrayBlack, Fringe_m ,GrayBlack_m1, Fringe_m1),
+							 s(Stream, D2,(X,Y),(XM,Y),GrayBlack_m1, Fringe_m1 ,GrayBlack_m2, Fringe_m2),
+							s(Stream, D3,(X,Y),(X,YP),GrayBlack_m2, Fringe_m2 ,GrayBlack_m3, Fringe_m3),
+							s(Stream, D4,(X,Y),(X,YM),GrayBlack_m3, Fringe_m3 ,GrayBlack_m4, Fringe_m4),
+							dfs(GrayBlack_m4, Fringe_m4, Goal, Stream).
+							
+ s(Stream,D,(SX,SY), (X,Y), GB, Fringe, GB_m, Fringe_m)
+ :-   (space(X,Y),  not(member((X,Y), GB))   -> 
+ append(GB, [(X,Y)], GB_m), append( [(X,Y)], Fringe ,  Fringe_m)
+ , write(Stream, 'p(('), write(Stream, SX), write(Stream, ','), write(Stream,SY), write(Stream,'),'), write(Stream,'('), write(Stream,X), write(Stream,','), write(Stream,Y), write(Stream,'),'),  write(Stream,D),  write(Stream,').'), nl(Stream)   
+  ; append(GB, [], GB_m), append(Fringe, [], Fringe_m) ). 
